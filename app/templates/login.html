@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% set active_page = "login" %}
+
+{% block content %}
+<h2>Login</h2>
+<div class="row mb-3">
+    <div class="col-md-5">
+        <form action="{{ url_for('home.login') }}" method="post" autocomplete="off">
+            <div class="mb-3">
+                <label for="uni" class="form-label">UNI</label>
+                <input type="text" class="form-control" name="uni" id="uni">
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" id="password">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

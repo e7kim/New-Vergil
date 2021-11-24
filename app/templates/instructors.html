@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% set active_page = "instructors" %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col-md-5">
+        <h2>Instructor Search</h2>
+        <p>Look up instructors matching <u>any</u> of the search parameters.</p>
+
+        <form action="{{ url_for('instructors.query', page=0) }}" name="instructor_search" method="post"
+            autocomplete="off" data-turbo-frame="search-results">
+            <div class="mb-3">
+                <label for="name" class="form-label">Name (first and/or last)</label>
+                <input type="text" class="form-control" name="name" id="name">
+            </div>
+
+            <div class="mb-3">
+                <label for="uni" class="form-label">UNI</label>
+                <input type="text" class="form-control" name="uni" id="uni">
+            </div>
+
+            <div class="mb-3">
+                <label for="department_code" class="form-label">Department</label>
+                <select name="department_code" class="form-control" id="department_code">
+                    <option value=""></option>
+                    {% for dept in dept_options %}
+                    <option value="{{ dept.department_code }}">{{ dept.department_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="building_code" class="form-label">Office building</label>
+                <select name="building_code" class="form-control" id="building_code">
+                    <option value=""></option>
+                    {% for bldg in bldg_options %}
+                    <option value="{{ bldg.building_code }}">{{ bldg.building_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="course_id" class="form-label">Course taught (e.g. COMSW4111)</label>
+                <input type="text" class="form-control" name="course_id" id="course_id">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+
+    <div class="col-md-7">
+        <turbo-frame id="search-results" target="_top">
+        </turbo-frame>
+    </div>
+</div>
+
+
+{% endblock %}

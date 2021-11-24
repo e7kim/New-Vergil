@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+
+{#
+    This template does double duty by allowing
+    to show reviews for both instructors and classes
+#}
+
+{% if reviews %}
+    <h2>Reviews for: {{ review_for }}</h2>
+    {% if review_category == 'class' %}
+        <h5 class="card-title">Instructor: {{instructor_first_name}} {{instructor_last_name}}</h5>
+    {% endif %}
+    <div class="row row-cols-1 g-2">
+        {% for review in reviews %}
+        <div class="col">
+            <div class="card" style="max-width: 700px;">
+                <div class="card-body">
+                    {% if review_category == 'instructor' %}
+                        <h5 class="card-title">{{review.course_id}} - {{review.course_name}}</h5>
+                    {% endif %}
+                    <p class="card-text">
+                        {{review.content}}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+<h2>No reviews</h2>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,32 @@
+<turbo-frame id="wishlist-search-results">
+    {% if search_results %}
+    <h2>Your Wishlist:</h2>
+    <div class="row row-cols-1 g-2 mt-2">
+        {% for class in search_results%}
+        <div class="col">
+            <div class="card" style="max-width: 700px;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ class.course_id }} - {{ class.name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Section {{ class.section }}</h6>
+                    <p class="card-text">
+                    <div><b>Department: </b>{{ class.department_name }}</div>
+                    <div><b>Points: </b>{{ class.points }} <b>Enrollment: </b>{{ class.enrollments }} student(s)</div>
+                    <div><b>Day/Time: </b>{{ class.days }} {{ class.begin_time }}-{{ class.end_time }} <b>Location:
+                        </b>{{ class.room_number }} {{ class.building_name }}</div>
+                    <div><b>Instructor: </b>{{ class.first_name }} {{ class.last_name }} ({{ class.uni }})</div>
+                    </p>
+                    <p class="card-text">
+                        {% set course_section = class.course_id ~ '_' ~ class.section %}
+                        <form method="POST" action="{{ url_for('wishlist.remove', course_section=course_section) }}">
+                            <button class="btn btn-link text-danger p-0"><small>Remove from wishlist</small></button>
+                        </form>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <h2>Your wishlist is empty!</h2>
+    {% endif %}
+</turbo-frame>

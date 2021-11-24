@@ -1,0 +1,2 @@
+SELECT uni
+FROM student

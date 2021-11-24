@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% set active_page = "classes" %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col-md-5">
+        <h2>Class Search</h2>
+        <p>Look up classes matching <u>all</u> of the search parameters.</p>
+
+        <form action="{{ url_for('classes.query', page=0) }}" method="post" autocomplete="off" data-turbo-frame="class-search-results">
+            <div class="mb-3">
+                <label for="course_id" class="form-label">Course ID (e.g. COMSW4111)</label>
+                <input type="text" class="form-control" name="course_id" id="course_id">
+            </div>
+
+            <div class="mb-3">
+                <label for="name" class="form-label">Course Name</label>
+                <input type="text" class="form-control" name="name" id="name">
+            </div>
+
+            <div class="mb-3">
+                <label for="department_code" class="form-label">Department</label>
+                <select name="department_code" class="form-control" id="department_code">
+                    <option value=""></option>
+                    {% for dept in dept_options %}
+                    <option value="{{ dept.department_code }}">{{ dept.department_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="uni" class="form-label">Instructor's UNI</label>
+                <input type="text" class="form-control" name="uni" id="uni">
+            </div>
+
+            <div class="mb-3">
+                <label for="building_code" class="form-label">Classroom Building</label>
+                <select name="building_code" class="form-control" id="building_code">
+                    <option value=""></option>
+                    {% for bldg in bldg_options %}
+                    <option value="{{ bldg.building_code }}">{{ bldg.building_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="begin_time" class="form-label">Start Time</label>
+                <select name="begin_time" class="form-control" id="begin_time">
+                    <option value="" selected=""></option>
+                    <option value="8">8:00 AM to 8:55 AM</option>
+                    <option value="9">9:00 AM to 9:55 AM</option>
+                    <option value="10">10:00 AM to 10:55 AM</option>
+                    <option value="11">11:00 AM to 11:55 AM</option>
+                    <option value="12">12:00 PM to 12:55 PM</option>
+                    <option value="13">1:00 PM to 1:55 PM</option>
+                    <option value="14">2:00 PM to 2:55 PM</option>
+                    <option value="15">3:00 PM to 3:55 PM</option>
+                    <option value="16">4:00 PM to 4:55 PM</option>
+                    <option value="17">5:00 PM to 5:55 PM</option>
+                    <option value="18">6:00 PM to 6:55 PM</option>
+                    <option value="19">7:00 PM to 7:55 PM</option>
+                    <option value="20">8:00 PM to 8:55 PM</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Days</label>
+                <div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" name="days" type="checkbox" value="M" id="M">
+                        <label class="form-check-label" for="M">
+                            M
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" name="days" type="checkbox" value="T" id="T">
+                        <label class="form-check-label" for="T">
+                            T
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" name="days" type="checkbox" value="W" id="W">
+                        <label class="form-check-label" for="W">
+                            W
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" name="days" type="checkbox" value="R" id="R">
+                        <label class="form-check-label" for="R">
+                            R
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" name="days" type="checkbox" value="F" id="F">
+                        <label class="form-check-label" for="F">
+                            F
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" name="days" type="checkbox" value="S" id="S">
+                        <label class="form-check-label" for="S">
+                            S
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+
+    <div class="col-md-7">
+        <turbo-frame id="class-search-results" target="_top">
+        </turbo-frame>
+    </div>
+</div>
+
+{% endblock %}

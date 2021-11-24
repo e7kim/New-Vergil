@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+{% if not 'USER_UNI' in session %}
+<div class="alert alert-danger" role="alert">
+    Login to write reviews
+</div>
+{% else %}
+<div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="reviewModalLabel">New review for {{ course_id }} section {{ section }}</h5>
+    </div>
+    <div class="modal-body">
+        <form action="{{ url_for('classes.post_review') }}" method="post">
+            <div class="mb-3">
+                <label for="content" class="col-form-label">Review:</label>
+                <textarea class="form-control" name="content" id="content"></textarea>
+                <textarea name="course_id" style="display:none;">{{ course_id }}</textarea>
+                <textarea name="section" style="display:none;">{{ section }}</textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Submit review</button>
+            </div>
+        </form>
+    </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

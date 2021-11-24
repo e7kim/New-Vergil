@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% set active_page = "wishlist" %}
+
+{% block content %}
+
+{% if not 'USER_UNI' in session %}
+<div class="alert alert-danger" role="alert">
+    Login to view wishlist
+</div>
+{% else %}
+<turbo-frame id="wishlist-search-results" target="_top" src="{{ url_for('wishlist.query') }}">
+</turbo-frame>
+{% endif %}
+
+{% endblock %}

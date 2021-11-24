@@ -1,0 +1,73 @@
+<turbo-frame id="class-search-results">
+{% if search_results %}
+    <h2>Search Results ({{search_results_count}} {{'results' if search_results_count > 1 else 'result'}}):</h2>
+    <nav>
+        {% set pagination_back_disabled = 'disabled' if current_page == 0 else '' %}
+        {% set pagination_front_disabled = 'disabled' if current_page == max_page else '' %}
+        <ul class="pagination">
+            <li class="{{'page-item ' ~ pagination_back_disabled}}">
+                <form action="{{ url_for('classes.query', page=0) }}" name="page_first" method="post" autocomplete="off" data-turbo-frame="search-results">
+                    <button type="submit" class="page-link">First</button>
+                </form>
+            </li>
+            <li class="{{'page-item ' ~ pagination_back_disabled}}">
+                <form action="{{ url_for('classes.query', page=current_page - 1) }}" name="page_previous" method="post" autocomplete="off" data-turbo-frame="search-results">
+                    <button type="submit" class="page-link">Previous</button>
+                </form>
+            </li>
+            <li class="{{'page-item ' ~ pagination_front_disabled}}">
+                <form action="{{ url_for('classes.query', page=current_page + 1) }}" name="page_next" method="post" autocomplete="off" data-turbo-frame="search-results">
+                    <button type="submit" class="page-link">Next</button>
+                </form>
+            </li>
+            <li class="{{'page-item ' ~ pagination_front_disabled}}">
+                <form action="{{ url_for('classes.query', page=max_page) }}" name="page_last" method="post" autocomplete="off" data-turbo-frame="search-results">
+                    <button type="submit" class="page-link">Last</button>
+                </form>
+            </li>
+        </ul>
+    </nav>
+    <div class="row row-cols-1 g-2 mt-2">
+        {% for class in search_results%}
+        <div class="col">
+            <div class="card" style="max-width: 700px;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ class.course_id }} - {{ class.name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Section {{ class.section }}</h6>
+                    <p class="card-text">
+                        <div><b>Department: </b>{{ class.department_name }}</div>
+                        <div><b>Points: </b>{{ class.points }} <b>Enrollment: </b>{{ class.enrollments }} student(s)</div>
+                        <div><b>Day/Time: </b>{{ class.days }} {{ class.begin_time }}-{{ class.end_time }} <b>Location: </b>{{ class.room_number }} {{ class.building_name }}</div>
+                        <div><b>Instructor: </b>{{ class.first_name }} {{ class.last_name }} ({{ class.uni }})</div>
+                    </p>
+                    <p class="card-text">
+                        {% set course_section = class.course_id ~ '_' ~ class.section %}
+                        {% if 'USER_UNI' in session %}
+                            {% if course_section in wishlisted_id %}
+                            <form method="POST" action="{{ url_for('wishlist.remove', course_section=course_section) }}">
+                                <button class="btn btn-link text-danger p-0"><small>Remove from wishlist</small></button>
+                            </form>
+                            {% else %}
+                            <form class="form-inline" method="POST" action="{{ url_for('wishlist.add', course_section=course_section) }}">
+                                <button class="btn btn-link text-success p-0"><small>Add to wishlist</small></button>
+                            </form>
+                            {% endif %}
+                        {% endif %}
+                        <form class="form-inline" action="{{ url_for('classes.review_read', course_id_section=course_section) }}">
+                            <button class="btn btn-link text-muted p-0"><small>Read reviews</small></button>
+                        </form>
+                        {% if 'USER_UNI' in session %}
+                            <form class="form-inline" action="{{ url_for('classes.review_write', course_id_section=course_section) }}">
+                                <button class="btn btn-link text-muted p-0"><small>Write a review</small></button>
+                            </form>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+<h2>No results</h2>
+{% endif %}
+</turbo-frame>

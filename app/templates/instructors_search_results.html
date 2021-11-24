@@ -1,0 +1,67 @@
+<turbo-frame id="search-results">
+    {% if search_results %}
+    <h2>Search Results ({{search_results_count}} {{'results' if search_results_count > 1 else 'result'}}):</h2>
+    <nav>
+        {% set pagination_back_disabled = 'disabled' if current_page == 0 else '' %}
+        {% set pagination_front_disabled = 'disabled' if current_page == max_page else '' %}
+        <ul class="pagination">
+            <li class="{{'page-item ' ~ pagination_back_disabled}}">
+                <form action="{{ url_for('instructors.query', page=0) }}" name="page_first" method="post" autocomplete="off" data-turbo-frame="search-results">
+                    <button type="submit" class="page-link">First</button>
+                </form>
+            </li>
+            <li class="{{'page-item ' ~ pagination_back_disabled}}">
+                <form action="{{ url_for('instructors.query', page=current_page - 1) }}" name="page_previous" method="post" autocomplete="off" data-turbo-frame="search-results">
+                    <button type="submit" class="page-link">Previous</button>
+                </form>
+            </li>
+            <li class="{{'page-item ' ~ pagination_front_disabled}}">
+                <form action="{{ url_for('instructors.query', page=current_page + 1) }}" name="page_next" method="post" autocomplete="off" data-turbo-frame="search-results">
+                    <button type="submit" class="page-link">Next</button>
+                </form>
+            </li>
+            <li class="{{'page-item ' ~ pagination_front_disabled}}">
+                <form action="{{ url_for('instructors.query', page=max_page) }}" name="page_last" method="post" autocomplete="off" data-turbo-frame="search-results">
+                    <button type="submit" class="page-link">Last</button>
+                </form>
+            </li>
+        </ul>
+    </nav>
+    <div class="row row-cols-1 g-2">
+        {% for instructor in search_results %}
+        <div class="col">
+            <div class="card p-1" style="max-width: 540px;">
+                <div class="row align-items-center g-0">
+                    <div class="col-md-4">
+                        <img src="{{'https://avatars.dicebear.com/api/bottts/' ~ instructor.uni | hash8 ~ '.svg'}}" class="img-fluid rounded-start">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{instructor.first_name}} {{instructor.last_name}} ({{instructor.uni}})</h5>
+                            <p class="card-text">
+                                <div>🎓 {{instructor.title}}</div>
+                                <div>🏛️ {{instructor.department_name}}</div>
+                            </p>
+                            <p class="card-text">
+                                <div>📧 {{instructor.email}}</div>
+                                {% if instructor.phone %}
+                                <div>☎️ {{instructor.phone_number}}</div>
+                                {% endif %}
+                                <div>🏢 {{instructor.building_name}} {{instructor.room_number}}</div>
+                            </p>
+                            <p class="card-text">
+                                <small>
+                                    <a href="{{ url_for('instructors.review_read', uni=instructor.uni) }}" class="text-muted">Read reviews</a>
+                                </small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <h2>No results</h2>
+    {% endif %}
+</turbo-frame>
